@@ -1,0 +1,43 @@
+---
+  - name: Modify welcome.conf to use .php instead of .html
+    lineinfile:
+      path: /etc/httpd/conf.d/welcome.conf
+      regexp: '^    ErrorDocument'
+      line: "    ErrorDocument 403 /noindex/index.php"
+    notify: restart httpd
+  - name: Modify welcome.conf to use .php instead of .html
+    lineinfile:
+      path: /etc/httpd/conf.d/welcome.conf
+      regexp: '^    DirectoryIndex'
+      line: "    DirectoryIndex index.php"
+    notify: restart httpd
+  - name: Copy default welcome page to a php equivalent
+    copy:
+      src: /usr/share/httpd/noindex/index.html.en-US
+      dest: /usr/share/httpd/noindex/index.php
+      remote_src: yes
+  - name: Add hostname to welcome page
+    community.general.xml:
+      path: /usr/share/httpd/noindex/index.php
+      xpath: /html/body/header/section/div/div/div/div/span
+      value: "Apache HTTP Server - {{ inventory_hostname }}"
+#  - name: Add tag for meta refresh
+#    community.general.xml:
+#      path: /usr/share/httpd/noindex/index.php
+#      xpath: /html/head/meta
+#      attribute: http-equiv
+#      value: refresh
+#  - name: Add tag for meta refresh
+#    community.general.xml:
+#      path: /usr/share/httpd/noindex/index.php
+#      xpath: /html/head/meta
+#      attribute: content
+#      value: "6"
+  - name: Add some javascript to handle a page refresh
+    community.general.xml:
+      path: /usr/share/httpd/noindex/index.php
+      xpath: /html/head
+      insertbefore: yes
+      add_children:
+        - script: "setTimeout(function(){window.location.reload(1);}, 6000);"
+...

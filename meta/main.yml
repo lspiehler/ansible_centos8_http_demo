@@ -1,0 +1,10 @@
+---
+  galaxy_info:
+    role_name: centos_http_demo
+    author: Lyas Spiehler
+    description: Basic HTTP demo showing default welcome page with hostname
+    company: Sapphire Health
+  collections:
+    - community.general
+  dependencies: []
+...

@@ -1,0 +1,6 @@
+---
+  - include: install-dependencies.yml
+    tags: install-dependencies
+  - include: configure-httpd.yml
+    tags: configure-httpd
+...

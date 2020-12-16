@@ -1,0 +1,33 @@
+---
+  #- name: Execute the command in remote shell; stdout goes to the specified file on the remote
+  #  shell: dnf module -y enable nginx:1.16
+  #- name: Execute the command in remote shell; stdout goes to the specified file on the remote
+  #  shell: dnf module -y enable php:7.3
+  #- name: Install remi repo.
+  #  yum:
+  #    name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+  #    state: present
+  #- name: Import remi GPG key.
+  #  rpm_key:
+  #    key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+  #    state: present
+  - name: Install a modularity appstream nginx
+    dnf:
+      name: '@nginx:1.16'
+      state: present
+  - name: Install a modularity appstream php
+    dnf:
+      name: '@php:7.3'
+      state: present
+  - name: Install web server components and dependencies
+    yum:
+      name:
+        - httpd
+      state: present
+    notify: restart httpd
+  - name: Install ansible lxml for community.general.xml
+    yum:
+      name:
+        - python3-lxml
+      state: present
+...
